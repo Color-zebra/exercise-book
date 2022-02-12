@@ -1,9 +1,10 @@
 "use strict"
 
-function randomNumber(min, max) {
-	return Math.random()*(max-min) + min;
+function randomInteger(min, max) {
+	return Math.floor(Math.random()*(max+1-min) + min);
 }
 
-console.log(randomNumber(1, 10));
-console.log(randomNumber(-100, 1));
-console.log(randomNumber(0, 1));
+console.log(randomInteger(1, 10));
+console.log(randomInteger(-100, 1));
+console.log(randomInteger(0, 1));
+console.log(randomInteger(1, 3));

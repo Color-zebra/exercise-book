@@ -1,66 +1,59 @@
 "use strict"
 
-function arrayBaseOperation() {
-	let styles = [
-		'Джаз', 'Блюз',
-	]
-	console.log(styles);
 
-	styles.push('Рок-н-ролл');
-	console.log(styles);
-
-	styles[Math.floor(styles.length/2)] = 'Классика';
-	console.log(styles);
-
-	let deleted = styles.shift();
-	console.log(deleted);
-
-	styles.unshift('Рэп', "Рэгги");
-	console.log(styles);
+function camelize(str) {
+	if (str) return str
+	.split('-')
+	.map((item, index) => index === 0 ? item : item[0].toUpperCase() + item.slice(1))
+	.join('');
+	return str;
 }
 
-//arrayBaseOperation();
+console.log(camelize('на-золотом-крыльце-сидели'));
+console.log(camelize(''));
 
 
-//-----------------------------------------------------------------------------------------------
-function sumEndlessInput() {
-	let arr = [];
-	let current = prompt('Insert number','');
+//------------------------------------------------------------------------------------------------------------------
+function filterRange(arr, a, b) {
+	return arr.filter((item) => item >= a && item <= b);
+};
 
-	while (isFinite(current) && current) {
-		arr.push(+current);
-		current = prompt('Insert number','');
+let arrrr = [5, 3, 8, 1];
+let filtered = filterRange(arrrr, 1, 4);
+console.log(arrrr);
+console.log(filtered);
+
+
+//------------------------------------------------------------------------------------------------------------------
+function filterRangeInPlace(arr, a, b) {
+	for (let i = 0; i < arr.length; i++) {
+		if (arr[i] < a || arr[i] > b) {
+			arr.splice(i, 1);
+		};
 	};
-
-	let result = 0;
-	for (let item of arr) {
-		result += item;
-	};
-
-	return result;
 }
 
-//console.log(sumEndlessInput());
+let array = [5, 3, 8, 1, 2, 3, 6, 7, 8];
+console.log(array);
+filterRangeInPlace(array, 3, 8);
+console.log(array);
 
 
-//-----------------------------------------------------------------------------------------------
-function getMaxSubSum(arr) {
-	let max = 0;
-	let current = 0;
-	for (let item of arr) {
-		current += item;
-		if (current > max) {
-			max = current;
-		} else if (current < 0) {
-			current = 0;
-		}
-	}
-	return max;
+//------------------------------------------------------------------------------------------------------------------
+function sortFromMaxToMin(arr) {
+	return arr.sort((a,b) => b-a)
 }
 
-getMaxSubSum([-1, 2, 3, -9]) //5
-getMaxSubSum([2, -1, 2, 3, -9]) //6
-getMaxSubSum([-1, 2, 3, -9, 11]) //11
-getMaxSubSum([-2, -1, 1, 2]) //3
-getMaxSubSum([100, -9, 2, -3, 5]) //100
-getMaxSubSum([1, 2, 3]) //6
+console.log(sortFromMaxToMin(array))
+
+
+//------------------------------------------------------------------------------------------------------------------
+function copySorted(arr) {
+	return arr.slice().sort()
+}
+
+let arr = ["HTML", "JavaScript", "CSS"];
+let sorted = copySorted(arr);
+
+console.log( sorted ); // CSS, HTML, JavaScript
+console.log( arr ); // HTML, JavaScript, CSS (без изменений)

@@ -1,46 +1,66 @@
 "use strict"
 
-//-----------------------------------------------------------------------------------------------------------------
-function firstToUpperCase(string) {
-	return string[0].toUpperCase() + string.slice(1);
-};
+function arrayBaseOperation() {
+	let styles = [
+		'Джаз', 'Блюз',
+	]
+	console.log(styles);
 
-console.log(firstToUpperCase('дирижабль'));
-console.log(firstToUpperCase('гваделупа'));
-console.log(firstToUpperCase('почтовая 22а'));
+	styles.push('Рок-н-ролл');
+	console.log(styles);
 
-//-----------------------------------------------------------------------------------------------------------------
-function checkSpam(string) {
-	if (string.toLowerCase().includes('porn') || string.toLowerCase().includes('drugs')) {
-		return true;
+	styles[Math.floor(styles.length/2)] = 'Классика';
+	console.log(styles);
+
+	let deleted = styles.shift();
+	console.log(deleted);
+
+	styles.unshift('Рэп', "Рэгги");
+	console.log(styles);
+}
+
+//arrayBaseOperation();
+
+
+//-----------------------------------------------------------------------------------------------
+function sumEndlessInput() {
+	let arr = [];
+	let current = prompt('Insert number','');
+
+	while (isFinite(current) && current) {
+		arr.push(+current);
+		current = prompt('Insert number','');
 	};
-	return false;
-};
 
-
-console.log(checkSpam('free porn'));
-console.log(checkSpam('frEE pORN'));
-console.log(checkSpam('продам гараж'));
-console.log(checkSpam('buy drugs'));
-console.log(checkSpam('summer holidays'));
-console.log(checkSpam('learn javascript online'));
-
-//-----------------------------------------------------------------------------------------------------------------
-function truncate(str, maxlength) {
-	if (str.length > maxlength) {
-		return str.slice(0, (maxlength-1)) + `\u{2026}`;
+	let result = 0;
+	for (let item of arr) {
+		result += item;
 	};
-	return str;
-};
 
-console.log(truncate('Добрый день!', 5));
-console.log(truncate('Бомба!', 10));
+	return result;
+}
 
-//-----------------------------------------------------------------------------------------------------------------
-function extractCurrencyValue(str) {
-	return parseInt(str.slice(1))
-};
+//console.log(sumEndlessInput());
 
-console.log(extractCurrencyValue('$120'));
-console.log(extractCurrencyValue('Р120'));
-console.log(extractCurrencyValue('Э250'));
+
+//-----------------------------------------------------------------------------------------------
+function getMaxSubSum(arr) {
+	let max = 0;
+	let current = 0;
+	for (let item of arr) {
+		current += item;
+		if (current > max) {
+			max = current;
+		} else if (current < 0) {
+			current = 0;
+		}
+	}
+	return max;
+}
+
+getMaxSubSum([-1, 2, 3, -9]) //5
+getMaxSubSum([2, -1, 2, 3, -9]) //6
+getMaxSubSum([-1, 2, 3, -9, 11]) //11
+getMaxSubSum([-2, -1, 1, 2]) //3
+getMaxSubSum([100, -9, 2, -3, 5]) //100
+getMaxSubSum([1, 2, 3]) //6

@@ -1,58 +1,69 @@
 "use strict"
 
 //===========================================================================================================
-let vasya = { name: "Вася", age: 25 };
-let petya = { name: "Петя", age: 30 };
-let masha = { name: "Маша", age: 28 };
 
-let array = [ vasya, petya, masha ];
-
-function sortByAge(arr) {
-	let arrCopy = arr.slice(0);
-	return arrCopy.sort((a, b) => a.age - b.age);
+let range = {
+	from: 1,
+	to: 5,
 };
 
-let sortedArr = sortByAge(array);
-
-console.log(array);
-console.log(sortedArr)
-
-// теперь: [vasya, masha, petya]
-console.log(sortedArr[0].name); // Вася
-console.log(sortedArr[1].name); // Маша
-console.log(sortedArr[2].name); // Петя
-
-
-//===========================================================================================================
-function averageAge(arr) {
-	return arr.reduce((sum, item) => (sum + item.age), 0)/arr.length;
-}
-
-console.log(averageAge(array));
-
-
-//===========================================================================================================
-function unique(arr) {
-	let result = [];
-	arr.forEach(item => result.includes(item) ? '' : result.push(item))
-	return result;
-}
-
-let strings = ["кришна", "кришна", "харе", "харе",
-	"харе", "харе", "кришна", "кришна", ":-O"
-];
-
-console.log( unique(strings) ); // кришна, харе, :-O
+range[Symbol.iterator] = function() {
+	return {
+		current: this.from,
+		last: this.to,
+		next() {
+			if (this.current <= this.last) {
+				return {
+					done: false,
+					value: this.current++,
+					};
+				} else {
+					return {
+						done: true,
+					};
+				}
+			},
+		};
+	};
 
 
-//===========================================================================================================
-let arr = [1, 2, 3];
+for (let item of range) {
+	console.log(item);
+};
 
-function shuffle(arr) {
-	let result = arr.slice(0);
-	return result.sort((a, b) => (Math.random()-0.5))
-}
+let daysOfTheWeek = {
+	0: 'monday',
+	1: 'tuesday',
+	2: 'wednesday',
+	3: 'thursday',
+	4: 'friday',
+	5: 'saturday',
+	6: 'sunday',
+	length: 7,
+	
+};
+daysOfTheWeek[Symbol.iterator] = function() {
+	return {
+		current: 0,
+		last: this.length,
+		next() {
+			if (this.current !== this.last) {
+				return {
+					done: false,
+					value: daysOfTheWeek[this.current++],
+				}
+			} else if (this.current == this.last){
+				return {
+					done: true,
+				}
+			};
+		},
+	};
+};
 
-console.log(shuffle(arr));
-console.log(shuffle(arr));
-console.log(shuffle(arr));
+for (let item of daysOfTheWeek) {
+	console.log(item)
+};
+
+let arr = Array.from(daysOfTheWeek);
+console.log(arr);

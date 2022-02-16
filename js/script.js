@@ -1,52 +1,69 @@
 "use strict"
 
-//==================================WITHOUT CLOSURE=========================================================================
+//===========================================================================================================
 
-let count = 0;
-function increaseCounter() {
-	count++;
-	console.log(count);
-}
-
-/* increaseCounter();
-increaseCounter();
-increaseCounter();
-increaseCounter();
-increaseCounter();
-increaseCounter();
-console.log(count) */
-
-
-//==================================WITH CLOSURE=========================================================================
-function createCounter(startingValue) {
-	let count = startingValue;
-	return () => {
-		count++;
-		console.log(count)
-	}
+let range = {
+	from: 1,
+	to: 5,
 };
 
-let firstCounter = createCounter(5);
-let secondCounter = createCounter(10);
-let thirdCounter = createCounter(15);
+range[Symbol.iterator] = function() {
+	return {
+		current: this.from,
+		last: this.to,
+		next() {
+			if (this.current <= this.last) {
+				return {
+					done: false,
+					value: this.current++,
+					};
+				} else {
+					return {
+						done: true,
+					};
+				}
+			},
+		};
+	};
 
-firstCounter();
-firstCounter();
-firstCounter();
 
-console.log('//=======================================')
+for (let item of range) {
+	console.log(item);
+};
 
-secondCounter();
+let daysOfTheWeek = {
+	0: 'monday',
+	1: 'tuesday',
+	2: 'wednesday',
+	3: 'thursday',
+	4: 'friday',
+	5: 'saturday',
+	6: 'sunday',
+	length: 7,
+	
+};
+daysOfTheWeek[Symbol.iterator] = function() {
+	return {
+		current: 0,
+		last: this.length,
+		next() {
+			if (this.current !== this.last) {
+				return {
+					done: false,
+					value: daysOfTheWeek[this.current++],
+				}
+			} else if (this.current == this.last){
+				return {
+					done: true,
+				}
+			};
+		},
+	};
+};
 
-console.log('//=======================================')
+for (let item of daysOfTheWeek) {
+	console.log(item)
+};
 
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
+let arr = Array.from(daysOfTheWeek);
+console.log(arr);

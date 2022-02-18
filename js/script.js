@@ -1,69 +1,130 @@
 "use strict"
 
-//===========================================================================================================
+//===============================================================================================================================================================================================
+// Рекурсия - это когда функция вызывает сама себя
+// Под капотом: Некая функция выполняется. Для ее выполнения создается контекст выполнения(подробнее не сейчас). Контекст закрывается после окончания выполнения функции.
+// Если в процессе выполнения функции ей понадобилось вызвать другую функция, то контекст не закрывается а отодвигается, до момента окончания выолнения вложенной функции.
+// Так будет продолжаться пока не выполнятся все вложенные функции. При рекурсии функция вызывает сама себя, до тех пор пока не сработает условие выхода из рекурсии,
+// к примеру некий счетчик не обнулиться и функция при обнулении счетчика вызовет не саму себя, а к пример вернет конкретный результат. 
+// После этого возвращенный результат передается в вышестоящую функцию, которая выполняется уже с полученным результатом, затем передает результат выше, 
+// а ее контекст закрывается вместе с завершением ее работы. Таким образом схлопываются все контексты ранее вызванных функция до первой функции, которая вернет нам конечный результат.
+// Количество одновременно открытых контекстов называется глубиной рекурсии.
 
-let range = {
-	from: 1,
-	to: 5,
-};
 
-range[Symbol.iterator] = function() {
-	return {
-		current: this.from,
-		last: this.to,
-		next() {
-			if (this.current <= this.last) {
-				return {
-					done: false,
-					value: this.current++,
-					};
-				} else {
-					return {
-						done: true,
-					};
-				}
-			},
-		};
+
+//===============================================================================================================================================================================================
+function sumToRec(n) {
+	if ( n > 1 ) {
+		return n + sumToRec(n-1);
+	} return n;
+}
+console.log(sumToRec(100));
+console.log(sumToRec(2));
+console.log(sumToRec(3));
+
+
+function sumToCycle(n) {
+	let result = 0;
+	for ( let i = n; i > 0; i--) {
+		result += i;
+	}
+	return result;
+}
+console.log(sumToCycle(100));
+console.log(sumToCycle(2));
+console.log(sumToCycle(3));
+
+
+function sumToProg(n) {
+	return (1 + n) / 2 * n
+}
+console.log(sumToProg(100));
+console.log(sumToProg(2));
+console.log(sumToProg(3));
+
+
+console.log('=================================')
+//===============================================================================================================================================================================================
+function factorial(n) {
+	if (n == 1) return n;
+	return n * factorial(n - 1);
+}
+console.log(factorial(5));
+
+
+console.log('=================================')
+//===============================================================================================================================================================================================
+function fib(n) {
+	let arr = [1, 1,];
+	for (let i=1; i < n; i++) {
+		arr.push(arr[i] + arr[i-1])
 	};
+	return arr[n-1];
+};
+console.log(fib(3));
+console.log(fib(7));
+console.log(fib(77));
+
+function fibRec(n) {
+	if (n < 2) return n;
+	return fibRec(n-1)+fibRec(n-2)
+};
+console.log(fibRec(3));
+console.log(fibRec(7));
 
 
-for (let item of range) {
-	console.log(item);
+console.log('=================================')
+//===============================================================================================================================================================================================
+let list = {
+	value: 1,
+	next: {
+		value: 2,
+		next: {
+			value: 3,
+			next: {
+				value: 4,
+				next: null
+			}
+		}
+	}
 };
 
-let daysOfTheWeek = {
-	0: 'monday',
-	1: 'tuesday',
-	2: 'wednesday',
-	3: 'thursday',
-	4: 'friday',
-	5: 'saturday',
-	6: 'sunday',
-	length: 7,
-	
+function printList(list) {
+	console.log(list.value);
+	if(list.next) printList(list.next);
 };
-daysOfTheWeek[Symbol.iterator] = function() {
-	return {
-		current: 0,
-		last: this.length,
-		next() {
-			if (this.current !== this.last) {
-				return {
-					done: false,
-					value: daysOfTheWeek[this.current++],
-				}
-			} else if (this.current == this.last){
-				return {
-					done: true,
-				}
-			};
-		},
-	};
-};
+printList(list)
 
-for (let item of daysOfTheWeek) {
-	console.log(item)
+function printListCycle(list) {
+	let cache = list;
+	while (cache) {
+		console.log(cache.value);
+		cache = cache.next;
+	}
 };
+printListCycle(list)
+//TO LEARN сам не допер, повторить.
 
-let arr = Array.from(daysOfTheWeek);
-console.log(arr);
+
+console.log('=================================')
+//===============================================================================================================================================================================================
+function printListReverseCycle(list) {
+	let cache = list;
+	let values = []
+	while (cache) {
+		values.push(cache.value);
+		cache = cache.next;
+	}
+	for (let item of values.reverse()) {
+		console.log(item);
+	}
+};
+printListReverseCycle(list);
+
+function printListReverse(list) {
+	if (list.next) printListReverse(list.next);
+	console.log(list.value)
+};
+printListReverse(list);
+//фишка в том, что пока не выполнится функция, выполнение которой начинается в случае если условие выполняется, функция дальше не пойдет.
+//таким образом, функция сперва "нырнет" до дна объекта, когда list.nex = null, а затем начнет всплывать, схлопывая функции начиная со дна и выводя в консоль при схлопываии list.value

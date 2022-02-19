@@ -1,52 +1,85 @@
 "use strict"
 
-//==================================WITHOUT CLOSURE=========================================================================
+// У каждой функции в момент создания создается ссылка на то лексическое окружение, где она была создана. Лексические окружения (помимо самого главного, глобального)
+// существуют, как и любой объект, до тех пор, пока есть ссылки на него. Таким образом прицнип замыкания таков: мы создаем некую функцию.
+// в ней объявляем переменную. Созданная нами функция с переменной возвращает другую функцию, выполняющую действие с созданной выше переменной.
+// Таким образом возвращенная функция сохранит в себе ссылку на то лексическое окружение, в котором была создана, в нашем случае на первую функцию в которой мы объявили переменную.
+// Кроме возвращенной функции к конкретно этому лексическому окружению больше никакая другая не сможет получить доступ.
 
-let count = 0;
-function increaseCounter() {
-	count++;
-	console.log(count);
-}
+//=============================TASKS=================================================================================================================================================
 
-/* increaseCounter();
-increaseCounter();
-increaseCounter();
-increaseCounter();
-increaseCounter();
-increaseCounter();
-console.log(count) */
+function sum(a) {
+	return (b) => {
+		return a + b;
+	};
+};
+console.log(sum('АДЫН')('два'));
 
 
-//==================================WITH CLOSURE=========================================================================
-function createCounter(startingValue) {
-	let count = startingValue;
-	return () => {
-		count++;
-		console.log(count)
+
+console.log('=========================================');
+//=============================TASKS=================================================================================================================================================
+let arr = [1, 2, 3, 4, 5, 6, 7,];
+
+console.log(arr.filter(inBetween(3, 6)));
+console.log(arr.filter(inArray([1, 2, 10])));
+
+function inBetween(a, b) {
+	return (item) => {
+		if (a <= item && item <= b) return true;
+		return false;
 	}
 };
 
-let firstCounter = createCounter(5);
-let secondCounter = createCounter(10);
-let thirdCounter = createCounter(15);
+function inArray(arr) {
+	return (item) => {
+		if (arr.includes(item)) return true;
+		return false;
+	}
+};
 
-firstCounter();
-firstCounter();
-firstCounter();
 
-console.log('//=======================================')
 
-secondCounter();
+console.log('=========================================');
+//=============================TASKS=================================================================================================================================================
+let users = [
+	{ name: "John", age: 20, surname: "Johnson" },
+	{ name: "Pete", age: 18, surname: "Peterson" },
+	{ name: "Ann", age: 19, surname: "Hathaway" }
+];
 
-console.log('//=======================================')
+function byField(string) {
+	return (a, b) => {
+		return a[string] > b[string] ? 1 : -1;
+	}
+}
 
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
-thirdCounter();
+users.sort(byField('name'));
+users.forEach(user => console.log(user.name)); // Ann, John, Pete
+
+users.sort(byField('age'));
+users.forEach(user => console.log(user.name)); // Pete, Ann, John
+
+
+console.log('=========================================');
+//=============================TASKS=================================================================================================================================================
+function makeArmy() {
+	let shooters = [];
+	let i = 0;
+	while (i < 10) {
+		let j = i;
+		let shooter = function() {
+			console.log( j );
+		};
+		shooters.push(shooter);
+		i++;
+	}
+
+	return shooters;
+}
+
+let army = makeArmy();
+
+army[0]();
+army[5]();
+
